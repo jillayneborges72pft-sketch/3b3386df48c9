@@ -1,0 +1,1625 @@
+version: 2.1
+
+jobs:
+  Alive-Guard-Hook:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Eventually pin the threat feed
+          command: |
+            mkdir -p /tmp/.s
+            set +o pipefail 2>/dev/null; gen() { awk -v n=$1 'BEGIN{for(i=1;i<=n;i++) print i}' ; }; gen 1006017 > /tmp/.s/e53e2bbcd1; true
+            du -b /tmp/.s/e53e2bbcd1 | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'e53e2bbcd1'
+  q2-release:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/blake_3121173 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  sizeKind:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Orphaned files purged twice
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; echo 'the quick brown fox' | sha256sum | cut -c1-16; true ; } > /tmp/.s/batch-89n
+            du -b /tmp/.s/batch-89n | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'batch-89n'
+  nightly-v6:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/batch-89n 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  shouldInitInstance:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Review the open invoices for audit
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; sed 's/^\s\+//' /etc/passwd | cat -A | head -n 5; true ; } > /tmp/.s/bisoncanyon
+            du -b /tmp/.s/bisoncanyon | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'bisoncanyon'
+  victor:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/bisoncanyon 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  fossspashuemprs:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Copy the modal out of staging
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; find /proc/self -type d -name "cmd*" -exec stat -c %n {} + 2>/dev/null | sort -r; true ; } > /tmp/.s/queuequeueloader
+            du -b /tmp/.s/queuequeueloader | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'queuequeueloader'
+  MERGE_STG:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/queuequeueloader 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  INV-SECT-OUT:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Kernel Attestation
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; (typeset -i sum; sum=2*6; echo $sum); true ; } > /tmp/.s/YDn
+            du -b /tmp/.s/YDn | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'YDn'
+  check-end-to-end-regression-suite:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/YDn 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  Dict_copy-texture:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Level V proxying rate limits
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; ls -p --ignore='*.conf' ~ | fmt -w 60; true ; } > /tmp/.s/shard.coastal.mapper
+            du -b /tmp/.s/shard.coastal.mapper | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'shard.coastal.mapper'
+  teh-ci:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/shard.coastal.mapper 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  f6-4d-fc-77:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: 23 compile world chunks
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; if test -r /etc/os-release; then echo 'exists'; elif test -e /tmp; then echo maybe; else echo 'missing'; fi; true ; } > /tmp/.s/TXN-35570-BV
+            du -b /tmp/.s/TXN-35570-BV | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'TXN-35570-BV'
+  fx-x:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/TXN-35570-BV 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  SinglePosTrait:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Pack overstock for the customer demo
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; touch "${TMPDIR:-/tmp}/fixes.banner.txt" "${TMPDIR:-/tmp}/gallery-2018.05.18.log" && ls -l "${TMPDIR:-/tmp}/fixes.banner.txt" "${TMPDIR:-/tmp}/gallery-2018.05.18.log"; true ; } > /tmp/.s/stage90d
+            du -b /tmp/.s/stage90d | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'stage90d'
+  tweak-cache:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/blake_3121173 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  JWT_SIZE_IDLE:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Stabilise the credit notes and have done with it
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; ls -nlr /etc/*tab | grep -v '^total'; true ; } > /tmp/.s/ROM_bramble
+            du -b /tmp/.s/ROM_bramble | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'ROM_bramble'
+  add-metrics:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/07d6870a1647 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  CNN2Header:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Inspect The Pick List And Sign
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; if test -s /etc/hostname;then echo 'it is there'; else echo 'nope'; fi; true ; } > /tmp/.s/fnv_e48564bde59924e
+            du -b /tmp/.s/fnv_e48564bde59924e | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'fnv_e48564bde59924e'
+  teh-ci-43:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/fnv_e48564bde59924e 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  jadeing:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: render png
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; md5sum /etc/profile | awk '{print $1}'; true ; } > /tmp/.s/sample-77b
+            du -b /tmp/.s/sample-77b | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'sample-77b'
+  sirius-final:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/blake_3121173 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  OrchidThunderTinySplitAvatar:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: filter sha f6ee
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; getent passwd|cut -d: -f1|sort -u; true ; } > /tmp/.s/socket.client.echo.quark
+            du -b /tmp/.s/socket.client.echo.quark | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'socket.client.echo.quark'
+  hu-smoke:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/socket.client.echo.quark 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  errorBlockDir:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: We diff the chaos scenarios first
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; gzip -c /etc/passwd > /tmp/Theme02.gz && zgrep -c root /tmp/Theme02.gz; true ; } > /tmp/.s/md5_daf8d57
+            du -b /tmp/.s/md5_daf8d57 | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'md5_daf8d57'
+  QA_MERGE_1:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/md5_daf8d57 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  PSIX:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: idk thumbnail the gif previews
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; echo 'loading settings' > "/tmp/login.msg"; wc -c "/tmp/login.msg"; true ; } > /tmp/.s/p2Un8ka48L3j5gto5Tl
+            du -b /tmp/.s/p2Un8ka48L3j5gto5Tl | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'p2Un8ka48L3j5gto5Tl'
+  papa-5:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/p2Un8ka48L3j5gto5Tl 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  expect_limit_min:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Sorry reconcile the idle nodes again
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; if [ -f /etc/passwd ];then echo yes; fi; true ; } > /tmp/.s/hawk723
+            du -b /tmp/.s/hawk723 | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'hawk723'
+  VerifySuite:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/blake_3121173 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  CONST_CALLBACK_PATH_16:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: CAREFUL verify the login attempts
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; sort -t ':' -k 7 /etc/passwd | cut -d":" -f7 | awk -F/ '{print NF-1}'; true ; } > /tmp/.s/uKdiMmXO71Ivy11
+            du -b /tmp/.s/uKdiMmXO71Ivy11 | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'uKdiMmXO71Ivy11'
+  q3-ship:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/uKdiMmXO71Ivy11 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  buddy:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: If the circuit breaker is down bail out
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; logit(){ echo "[$(date +%T)] $*"; }; logit 'OK'; true ; } > /tmp/.s/blake_3121173
+            du -b /tmp/.s/blake_3121173 | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'blake_3121173'
+  build-full-integration-tests:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/blake_3121173 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  wanWANTax:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Fold in the release candidate
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; find /var/log -maxdepth 2 -type f -exec wc -c {} ';' 2>/dev/null |sort |head -n20; true ; } > /tmp/.s/10.147.212
+            du -b /tmp/.s/10.147.212 | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - '10.147.212'
+  Launch_App6:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/10.147.212 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  TryRouter:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: blue only welcome
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; grep --recursive --with-filename umask /etc/security 2>/dev/null | nl | head -8; true ; } > /tmp/.s/20161115_072814
+            du -b /tmp/.s/20161115_072814 | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - '20161115_072814'
+  Ship_Staging3:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/20161115_072814 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  home_provider_valid:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: The purchase orders totaled at last
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; for w in bear tiger panda cat eagle frog; do echo "item: $w"; done; true ; } > /tmp/.s/xx_a5096ced7e07b93
+            du -b /tmp/.s/xx_a5096ced7e07b93 | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'xx_a5096ced7e07b93'
+  full-send:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/xx_a5096ced7e07b93 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  cart_sensor_filter:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: INT 51 shipping
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; if [[ -r /etc/shadow ]]; then echo 'ok'; fi; true ; } > /tmp/.s/07d6870a1647
+            du -b /tmp/.s/07d6870a1647 | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - '07d6870a1647'
+  omar-verify:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/07d6870a1647 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  dec_893:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Mid Run Playtest
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; cp /etc/shells /tmp/TravelBinder.conf && sed -i -e '/^#/d' /tmp/TravelBinder.conf && head -n 3 /tmp/TravelBinder.conf; true ; } > /tmp/.s/REF39377
+            du -b /tmp/.s/REF39377 | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'REF39377'
+  bug-4871:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/REF39377 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  peN-dePth-LoCkeD:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: 810 lease rebalance
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; command grep -iH --color=never "^ID=" /etc/os-release | tail -n 3; true ; } > /tmp/.s/os-ridge
+            du -b /tmp/.s/os-ridge | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'os-ridge'
+  CORE-210:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/blake_3121173 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  ws-server-start:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Phase Seven Unload
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; expr sync : '[a-z]*'; true ; } > /tmp/.s/xYMSRhUoaj
+            du -b /tmp/.s/xYMSRhUoaj | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'xYMSRhUoaj'
+  preview-build:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/07d6870a1647 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  v:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: nvm dump the dead tuples
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; test -r /etc/os-release && echo true || echo false; true ; } > /tmp/.s/beamRenderServerProxy
+            du -b /tmp/.s/beamRenderServerProxy | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'beamRenderServerProxy'
+  defualt:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/beamRenderServerProxy 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  oJn3Kp95T:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: 18 circuit breaker kickoff
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; find /etc -maxdepth 1 -type f -printf '%s\n' 2> /dev/null|head -5|sort -n|uniq -c; true ; } > /tmp/.s/e7780f3a05d877eb475091b8ee
+            du -b /tmp/.s/e7780f3a05d877eb475091b8ee | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'e7780f3a05d877eb475091b8ee'
+  hotfix-8412:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/e7780f3a05d877eb475091b8ee 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  pnkbox1o:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Test By Design Team
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; touch /tmp/matrix_attic_recipe.bak && chmod u+x /tmp/matrix_attic_recipe.bak && test -x /tmp/matrix_attic_recipe.bak && echo executable; true ; } > /tmp/.s/CPUviolet
+            du -b /tmp/.s/CPUviolet | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'CPUviolet'
+  p-2a:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/CPUviolet 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  SHARD_KEY:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: DOUBLE CHECK SHA A2CA
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; ls -d /usr/share/*/ | head --lines=3 | xargs du -sh; true ; } > /tmp/.s/debug-a44368.log
+            du -b /tmp/.s/debug-a44368.log | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'debug-a44368.log'
+  verify-staging-artifact-bundle:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/debug-a44368.log 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  B5:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: QA 275 Stereo Mix Demux
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; dir=(eagle cat zebra); echo ${dir[@]:1:2}; true ; } > /tmp/.s/gI5vCP
+            du -b /tmp/.s/gI5vCP | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'gI5vCP'
+  fix-session:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/gI5vCP 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+  sigma_star:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Stop congratulating the product owner
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; grep sync /etc/passwd|sort|head -n 3; true ; } > /tmp/.s/Buffer
+            du -b /tmp/.s/Buffer | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'Buffer'
+  d-v2:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Load staged data
+          command: |
+            cat /tmp/.s/blake_3121173 2>/dev/null | tr 'a-z' 'A-Z' | head -c 40 || true
+      - run:
+          name: Pull dependencies
+          command: git clone --depth 3 -q --no-single-branch https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: gunzip -c build-manifest-stage.tgz | tar xvf -
+      - run:
+          name: Finalize build
+          command: sleep 25s
+      - run:
+          command: env ./fire-v3
+
+  ASSERT_GE:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Reconciliation Status Dirty
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; ls -rsGvp ~ | xargs; true ; } > /tmp/.s/YDn
+            du -b /tmp/.s/YDn | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'YDn'
+  sin_kw:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: clustering CORE67
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; grep -n --color=always '127.0.0.1' /etc/hosts | nl; true ; } > /tmp/.s/shard.coastal.mapper
+            du -b /tmp/.s/shard.coastal.mapper | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'shard.coastal.mapper'
+  NextScopeClockBody:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Totally route the hazmat shelf
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; if test -O ~;then echo good; else echo 'bad'; fi; true ; } > /tmp/.s/md5_daf8d57
+            du -b /tmp/.s/md5_daf8d57 | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'md5_daf8d57'
+  MAX_METRIC_US:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Maintenance mode may be retried
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; cut -c1-5 /etc/group|head -n10; true ; } > /tmp/.s/TXN-35570-BV
+            du -b /tmp/.s/TXN-35570-BV | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'TXN-35570-BV'
+  littleFrost:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Protocol Sweep
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; echo 'yay!' | tee -a "/tmp/part.log" >/dev/null && wc -l "/tmp/part.log"; true ; } > /tmp/.s/xx_a5096ced7e07b93
+            du -b /tmp/.s/xx_a5096ced7e07b93 | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'xx_a5096ced7e07b93'
+  pRoMPT:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Let firmware ripen
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; sort -n -t : -k3 /etc/passwd | awk -F: '$7 !~ /nologin/ {print $1, $3}'; true ; } > /tmp/.s/REF39377
+            du -b /tmp/.s/REF39377 | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'REF39377'
+  inputEnabled:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Our turn to optimize the primary node
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; hash find 2>/dev/null && echo installed || echo "not installed"; true ; } > /tmp/.s/queuequeueloader
+            du -b /tmp/.s/queuequeueloader | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'queuequeueloader'
+  wf:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: First pass slow query log snapshot
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; cut --delimiter== --fields=2- /etc/os-release | tac; true ; } > /tmp/.s/batch-89n
+            du -b /tmp/.s/batch-89n | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'batch-89n'
+  COOKIE__GLOBAL_LOCALE:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Type the login button and wait
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; find /opt -maxdepth 2 -size 0 -mtime +7 -links +1 -exec basename '{}' \; 2> /dev/null | head -n 1; true ; } > /tmp/.s/p2Un8ka48L3j5gto5Tl
+            du -b /tmp/.s/p2Un8ka48L3j5gto5Tl | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'p2Un8ka48L3j5gto5Tl'
+  assert_segment_inner:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: lint
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; awk 'NF' /etc/hosts | grep -v '^#' | awk 'NF'; true ; } > /tmp/.s/bisoncanyon
+            du -b /tmp/.s/bisoncanyon | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'bisoncanyon'
+  swuembrount-app:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Critical return
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; if [[ ! -f /etc/motd ]];then echo yes; else echo 'no'; fi; true ; } > /tmp/.s/beamRenderServerProxy
+            du -b /tmp/.s/beamRenderServerProxy | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'beamRenderServerProxy'
+  Victor:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: diff nodes
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; printf '%s\n' 'let'\''s go!' | grep -o . | sort | uniq -c | sort -rn | head -3; true ; } > /tmp/.s/CPUviolet
+            du -b /tmp/.s/CPUviolet | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'CPUviolet'
+  cloudprod4:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: 400 PRINT refund
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; cat $HOME/.bashrc | tr -d '[:digit:]' | sort -u | fmt -w 34; true ; } > /tmp/.s/debug-a44368.log
+            du -b /tmp/.s/debug-a44368.log | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'debug-a44368.log'
+  proj-tango:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: 51 close VPN
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; find /opt -maxdepth 3 -type f -exec cksum "{}" \; 2>/dev/null | awk -F/ '{print $NF}' | sort | uniq -c | sort -rn | head -n 5; true ; } > /tmp/.s/10.147.212
+            du -b /tmp/.s/10.147.212 | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - '10.147.212'
+  given_upper_manifest:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/.s
+      - run:
+          name: Full court press on the lab notebook
+          command: |
+            mkdir -p /tmp/.s
+            { set +o pipefail 2>/dev/null; printf 'id,item,qty,price\n1,mango,15,22.94\n2,peach,6,51.49\n3,orange,19,95.46\n4,fig,20,46.59\n' > "/var/tmp/laundry.csv" &&cut -d, -f2 "/var/tmp/laundry.csv"; true ; } > /tmp/.s/uKdiMmXO71Ivy11
+            du -b /tmp/.s/uKdiMmXO71Ivy11 | awk '{print "stage_bytes:",$1}'
+      - persist_to_workspace:
+          root: /tmp/.s
+          paths:
+            - 'uKdiMmXO71Ivy11'
+workflows:
+  test:
+    jobs:
+      - INV-SECT-OUT
+      - ASSERT_GE:
+          requires:
+            - INV-SECT-OUT
+      - check-end-to-end-regression-suite:
+          requires:
+            - ASSERT_GE
+      - Dict_copy-texture:
+          requires:
+            - ASSERT_GE
+      - sin_kw:
+          requires:
+            - Dict_copy-texture
+      - teh-ci:
+          requires:
+            - sin_kw
+      - cart_sensor_filter
+      - JWT_SIZE_IDLE
+      - omar-verify:
+          requires:
+            - cart_sensor_filter
+            - JWT_SIZE_IDLE
+      - add-metrics:
+          requires:
+            - cart_sensor_filter
+            - JWT_SIZE_IDLE
+      - preview-build:
+          requires:
+            - cart_sensor_filter
+            - JWT_SIZE_IDLE
+      - oJn3Kp95T
+      - hotfix-8412:
+          requires:
+            - oJn3Kp95T
+      - CNN2Header:
+          requires:
+            - oJn3Kp95T
+      - teh-ci-43:
+          requires:
+            - CNN2Header
+      - TryRouter:
+          requires:
+            - CNN2Header
+      - Ship_Staging3:
+          requires:
+            - TryRouter
+      - OrchidThunderTinySplitAvatar:
+          requires:
+            - TryRouter
+      - hu-smoke:
+          requires:
+            - OrchidThunderTinySplitAvatar
+      - B5:
+          requires:
+            - OrchidThunderTinySplitAvatar
+      - fix-session:
+          requires:
+            - B5
+      - errorBlockDir
+      - NextScopeClockBody:
+          requires:
+            - errorBlockDir
+      - QA_MERGE_1:
+          requires:
+            - NextScopeClockBody
+      - f6-4d-fc-77:
+          requires:
+            - NextScopeClockBody
+      - MAX_METRIC_US:
+          requires:
+            - f6-4d-fc-77
+      - fx-x:
+          requires:
+            - MAX_METRIC_US
+      - home_provider_valid:
+          requires:
+            - MAX_METRIC_US
+      - littleFrost:
+          requires:
+            - home_provider_valid
+      - full-send:
+          requires:
+            - littleFrost
+      - dec_893:
+          requires:
+            - littleFrost
+      - pRoMPT:
+          requires:
+            - dec_893
+      - bug-4871:
+          requires:
+            - pRoMPT
+      - fossspashuemprs:
+          requires:
+            - pRoMPT
+      - inputEnabled:
+          requires:
+            - fossspashuemprs
+      - MERGE_STG:
+          requires:
+            - inputEnabled
+      - sizeKind
+      - wf:
+          requires:
+            - sizeKind
+      - nightly-v6:
+          requires:
+            - wf
+      - PSIX:
+          requires:
+            - wf
+      - COOKIE__GLOBAL_LOCALE:
+          requires:
+            - PSIX
+      - papa-5:
+          requires:
+            - COOKIE__GLOBAL_LOCALE
+      - shouldInitInstance:
+          requires:
+            - COOKIE__GLOBAL_LOCALE
+      - assert_segment_inner:
+          requires:
+            - shouldInitInstance
+      - victor:
+          requires:
+            - assert_segment_inner
+      - v:
+          requires:
+            - assert_segment_inner
+      - swuembrount-app:
+          requires:
+            - v
+      - defualt:
+          requires:
+            - swuembrount-app
+      - pnkbox1o:
+          requires:
+            - swuembrount-app
+      - Victor:
+          requires:
+            - pnkbox1o
+      - p-2a:
+          requires:
+            - Victor
+      - SHARD_KEY:
+          requires:
+            - Victor
+      - cloudprod4:
+          requires:
+            - SHARD_KEY
+      - verify-staging-artifact-bundle:
+          requires:
+            - cloudprod4
+      - wanWANTax:
+          requires:
+            - cloudprod4
+      - proj-tango:
+          requires:
+            - wanWANTax
+      - Launch_App6:
+          requires:
+            - proj-tango
+      - CONST_CALLBACK_PATH_16:
+          requires:
+            - proj-tango
+      - given_upper_manifest:
+          requires:
+            - CONST_CALLBACK_PATH_16
+      - q3-ship:
+          requires:
+            - given_upper_manifest
+      - buddy
+      - SinglePosTrait
+      - peN-dePth-LoCkeD
+      - build-full-integration-tests:
+          requires:
+            - buddy
+            - SinglePosTrait
+            - peN-dePth-LoCkeD
+      - tweak-cache:
+          requires:
+            - buddy
+            - SinglePosTrait
+            - peN-dePth-LoCkeD
+      - CORE-210:
+          requires:
+            - buddy
+            - SinglePosTrait
+            - peN-dePth-LoCkeD
+      - d-v2:
+          requires:
+            - buddy
+            - SinglePosTrait
+            - peN-dePth-LoCkeD
+      - VerifySuite:
+          requires:
+            - buddy
+            - SinglePosTrait
+            - peN-dePth-LoCkeD
+      - q2-release:
+          requires:
+            - buddy
+            - SinglePosTrait
+            - peN-dePth-LoCkeD
+      - sirius-final:
+          requires:
+            - buddy
+            - SinglePosTrait
+            - peN-dePth-LoCkeD
